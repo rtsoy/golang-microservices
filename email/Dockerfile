@@ -1,4 +1,8 @@
+# Use a multi-stage build
 FROM golang:alpine AS builder
+
+# Install build dependencies
+RUN apk --no-cache add gcc libc-dev
 
 WORKDIR /app
 
@@ -8,8 +12,9 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app ./main.go
+RUN go build -tags musl -o app ./main.go
 
+# Create the final lightweight image
 FROM alpine:latest
 
 RUN apk update && apk upgrade
