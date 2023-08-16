@@ -7,13 +7,14 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
-const kafkaAddr = "broker:9092"
+const kafkaAddr = "host.docker.internal:9092"
 
 func main() {
-	fmt.Println("Consumer Started")
+	fmt.Printf("Consumer Started: %v\n", kafkaAddr)
 
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": kafkaAddr,
+		"security.protocol": "plaintext",
 		"group.id":          "myGroup",
 		"auto.offset.reset": "earliest",
 	})
