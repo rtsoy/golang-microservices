@@ -19,3 +19,12 @@ func (u *User) HashPassword() {
 func (u *User) ComparePassword(pw string) bool {
 	return bcrypt.CompareHashAndPassword(u.Password, []byte(pw)) == nil
 }
+
+type RegisterInput struct {
+	FirstName       string `json:"firstName"`
+	LastName        string `json:"lastName"`
+	Email           string `json:"email"`
+	Password        string `json:"password"`
+	PasswordConfirm string `json:"passwordConfirm"`
+	IsAmbassador    bool   `json:"isAmbassador"`
+}
