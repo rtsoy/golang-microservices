@@ -5,6 +5,15 @@ services:
     build: .
     networks:
       - common_network
+  mailhog:
+    image: mailhog/mailhog
+    networks:
+      - common_network
+    logging:
+      driver: "none"
+    ports:
+      - "1025:1025" # SMTP Server
+      - "8025:8025" # WebUI
 
 networks:
   common_network:
