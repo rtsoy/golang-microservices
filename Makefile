@@ -3,7 +3,10 @@
 run-email:
 	cd ./email && docker-compose up --build -d
 
+run-users:
+	cd ./users && docker-compose up --build -d
+
 run-kafka:
 	docker-compose up -d
 
-run: run-kafka run-email
+run: run-kafka run-email run-users
