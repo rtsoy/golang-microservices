@@ -6,7 +6,11 @@ import (
 
 	"users/internal/domain"
 	"users/internal/repository"
+
+	"github.com/golang-jwt/jwt/v5"
 )
+
+const SecretKey = "secret"
 
 type userService struct {
 	rpstry repository.UserRepository
@@ -18,7 +22,28 @@ func newUserService(rpstry repository.UserRepository) UserService {
 	}
 }
 
-func (s *userService) CreateUser(input *domain.RegisterInput) (*domain.User, error) {
+func (s *userService) GenerateToken(input domain.LoginInput) (string, error) {
+	user, err := s.rpstry.GetUserByEmail(input.Email)
+	if err != nil {
+		return "", errors.New("Invalid Credentials")
+	}
+
+	if !user.ComparePassword(input.Password) {
+		return "", errors.New("Invalid Credentials")
+	}
+
+	claims := jwt.MapClaims{
+		"email": input.Email,
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	secret := SecretKey
+
+	return token.SignedString([]byte(secret))
+}
+
+func (s *userService) CreateUser(input domain.RegisterInput) (*domain.User, error) {
 	if input.Password != input.PasswordConfirm {
 		return nil, errors.New("Passwords do not match!")
 	}
@@ -27,11 +52,11 @@ func (s *userService) CreateUser(input *domain.RegisterInput) (*domain.User, err
 		return nil, errors.New("Invalid email")
 	}
 
-	if len(input.FirstName) > 1 {
+	if len(input.FirstName) < 0 {
 		return nil, errors.New("First name cannot be empty")
 	}
 
-	if len(input.LastName) > 1 {
+	if len(input.LastName) < 0 {
 		return nil, errors.New("Last name cannot be empty")
 	}
 

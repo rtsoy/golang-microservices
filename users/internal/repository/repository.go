@@ -17,5 +17,6 @@ func NewRepository(db *gorm.DB) *Repository {
 }
 
 type UserRepository interface {
+	GetUserByEmail(email string) (*domain.User, error)
 	CreateUser(user *domain.User) (*domain.User, error)
 }

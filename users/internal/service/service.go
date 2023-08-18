@@ -16,5 +16,6 @@ func NewService(rpstry *repository.Repository) *Service {
 }
 
 type UserService interface {
-	CreateUser(input *domain.RegisterInput) (*domain.User, error)
+	GenerateToken(input domain.LoginInput) (string, error)
+	CreateUser(input domain.RegisterInput) (*domain.User, error)
 }

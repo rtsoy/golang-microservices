@@ -20,5 +20,5 @@ func (h *Handler) InitRoutes(app *fiber.App) {
 	api := app.Group("/api/v1")
 
 	api.Post("/register", h.register)
-	// api.Post("/login")
+	api.Post("/login", h.login)
 }
