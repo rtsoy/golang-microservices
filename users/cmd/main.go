@@ -12,6 +12,8 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
+// Todo: .env file ?
+
 func main() {
 	db, err := mysql.New()
 	if err != nil {

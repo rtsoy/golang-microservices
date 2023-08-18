@@ -21,4 +21,10 @@ func (h *Handler) InitRoutes(app *fiber.App) {
 
 	api.Post("/register", h.register)
 	api.Post("/login", h.login)
+
+	protected := api.Use(IsAuthenticated)
+
+	protected.Get("/protected", func(c *fiber.Ctx) error {
+		return c.JSON("HELLO!")
+	})
 }
